@@ -1,7 +1,7 @@
 // 封装axios请求
 import axios from 'axios'
 import qs from 'qs'
-import {Loading} from 'element-ui'
+import { Loading } from 'element-ui'
 
 let loading = null
 
@@ -15,53 +15,53 @@ const isProduction = process.env.NODE_ENV === 'production'
 const service = axios.create()
 
 // 接口基础路径
-service.defaults.baseURL = isProduction ? '线上接口地址' : ''
-// 超时时间
-// service.defaults.timeout = 2000
-// 请求头类型
+service.defaults.baseURL = isProduction ? '线上接口地址' : '/api'
+    // 超时时间
+    // service.defaults.timeout = 2000
+    // 请求头类型
 service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // 请求拦截器
 service.interceptors.request.use(config => {
-  loading = Loading.service({
-    text: '正在加载中......'
-  })
-  let token = localStorage.getItem('adminToken')
-  // 每次请求 都在请求头带上token
-  if (token) {
-    config.headers['Authorization'] = 'Bearer ' + token
-  }
-  return config
+    loading = Loading.service({
+        text: '正在加载中......'
+    })
+    let token = localStorage.getItem('adminToken')
+        // 每次请求 都在请求头带上token
+    if (token) {
+        config.headers['Authorization'] = 'Bearer ' + token
+    }
+    return config
 }, err => {
-  console.log(err)
-  return Promise.reject(err)
+    console.log(err)
+    return Promise.reject(err)
 })
 
 
 // 响应拦截器
 service.interceptors.response.use(response => {
-  if (loading) {
-    loading.close()
-  }
-  return response.data
+    if (loading) {
+        loading.close()
+    }
+    return response.data
 }, err => {
-  // if (err.response.status === 401) {
-  //   Message.error(err.response.data.msg)
-  // }
+    // if (err.response.status === 401) {
+    //   Message.error(err.response.data.msg)
+    // }
 })
 
 
 // 封装get和post
-service.req = function (...params) {
-  if (params.length === 1) {
-    // 发的是get请求
-    return service.get(params[0])
-  }
-  if (params.length === 2) {
-    // post请求
-    // qs做序列化
-    return service.post(params[0], qs.stringify(params[1]))
-  }
+service.req = function(...params) {
+    if (params.length === 1) {
+        // 发的是get请求
+        return service.get(params[0])
+    }
+    if (params.length === 2) {
+        // post请求
+        // qs做序列化
+        return service.post(params[0], qs.stringify(params[1]))
+    }
 }
 
 // 默认到出创建的配置对象

@@ -16,7 +16,7 @@ module.exports = {
                 // 修改了vue.config.js文件 , 一定要重启项目
                 //http://localhost:3000
                 //要借口的路径就被代理成了/api
-                target: "https://cnodejs.org/api/v1",
+                target: "http://localhost:3000",
                 changeOrigin: true,
                 pathRewrite: {
                     "^/api": ""
